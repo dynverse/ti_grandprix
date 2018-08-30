@@ -1,6 +1,6 @@
 FROM dynverse/dynwrap:py3.6
 
-LABEL version 0.1.0.1
+LABEL version 0.1.0
 
 RUN pip install tensorflow
 
@@ -9,4 +9,4 @@ RUN git clone https://github.com/ManchesterBioinference/GrandPrix && cd GrandPri
 
 ADD . /code
 
-ENTRYPOINT /code/run.sh
+ENTRYPOINT python /code/run.py
