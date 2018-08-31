@@ -12,6 +12,7 @@ From: dynverse/dynwrap:py3.6
 
 %post
     chmod -R a+r /code
+    chmod a+x /code
     pip install tensorflow
     git clone https://github.com/GPflow/GPflow.git && cd GPflow && pip install GPflow
     git clone https://github.com/ManchesterBioinference/GrandPrix && cd GrandPrix && python setup.py install
