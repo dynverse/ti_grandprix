@@ -10,15 +10,14 @@ From: dynverse/dynwrap:py3.6
 %labels
     version 0.1.1
 
+%files
+    . /code
+
 %post
-    chmod -R a+r /code
-    chmod a+x /code
+    chmod -R 755 '/code'
     pip install tensorflow
     git clone https://github.com/GPflow/GPflow.git && cd GPflow && pip install GPflow
     git clone https://github.com/ManchesterBioinference/GrandPrix && cd GrandPrix && python setup.py install
-
-%files
-    . /code
 
 %runscript
     exec python /code/run.py
