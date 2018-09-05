@@ -8,7 +8,7 @@ Bootstrap: shub
 From: dynverse/dynwrap:py3.6
 
 %labels
-    version 0.1.1
+    version 0.1.2
 
 %files
     . /code
@@ -16,8 +16,8 @@ From: dynverse/dynwrap:py3.6
 %post
     chmod -R 755 '/code'
     pip install tensorflow
-    git clone https://github.com/GPflow/GPflow.git && cd GPflow && pip install GPflow
-    git clone https://github.com/ManchesterBioinference/GrandPrix && cd GrandPrix && python setup.py install
+    pip install git+https://github.com/GPflow/GPflow
+    pip install git+https://github.com/ManchesterBioinference/GrandPrix
 
 %runscript
     exec python /code/run.py
