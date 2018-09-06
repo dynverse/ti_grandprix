@@ -33,7 +33,10 @@ output:
 wrapper_type: end_state_probabilities
 doi: 10.1101/227843
 google_scholar_cluster_id: '15033203703043818597'
-trajectory_types: linear
+trajectory_types: 
+- linear
+- bifurcation
+- multifurcation
 topology_inference: fixed
 authors:
 - given: Sumon
