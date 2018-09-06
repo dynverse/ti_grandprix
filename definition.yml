@@ -1,5 +1,6 @@
 id: grandprix
 docker_repository: dynverse/ti_grandprix
+singularity_collection: 1550
 container_url: https://github.com/dynverse/ti_grandprix
 name: GrandPrix
 type: algorithm
