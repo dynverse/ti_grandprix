@@ -38,7 +38,7 @@ trajectory_types:
 - linear
 - bifurcation
 - multifurcation
-topology_inference: param
+topology_inference: parameter
 authors:
 - given: Sumon
   family: Ahmed
