@@ -6,11 +6,6 @@ name: GrandPrix
 source: tool
 platform: Python
 parameters:
-  n_latent_dims:
-    type: integer
-    default: 2
-    lower: 1
-    upper: 10
   n_inducing_points:
     type: integer
     default: 40
@@ -24,7 +19,9 @@ parameters:
     default: 0.028
 input:
   format: text
-  required: expression
+  required: 
+  - expression
+  - end_n
   optional: timecourse_continuous
 output:
   format: text

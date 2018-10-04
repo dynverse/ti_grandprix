@@ -20,6 +20,7 @@ checkpoints = {}
 #   Load data                                                               ####
 expression = pd.read_csv("/ti/input/expression.csv", index_col=[0])
 params = json.load(open("/ti/input/params.json", "r"))
+end_n = json.load(open("/ti/input/end_n.json"))[0]
 
 if os.path.exists("/ti/input/timecourse_continuous.csv"):
   time = pd.read_csv("/ti/input/timecourse_continuous.csv")
@@ -31,10 +32,13 @@ checkpoints["method_afterpreproc"] = tm.time()
 #   ____________________________________________________________________________
 #   Infer trajectory                                                        ####
 # fit grandprix model, based on https://github.com/ManchesterBioinference/GrandPrix/blob/master/notebooks/Guo.ipynb
+if end_n == 0:
+  end_n = 1
+
 if time is not None:
   pt_np, var_np = GrandPrix.fit_model(
     data = expression.values,
-    n_latent_dims = params["n_latent_dims"],
+    n_latent_dims = end_n,
     n_inducing_points = params["n_inducing_points"],
     latent_var = params["latent_var"],
     latent_prior_mean = time.time,
@@ -43,7 +47,7 @@ if time is not None:
 else:
   pt_np, var_np = GrandPrix.fit_model(
     data = expression.values,
-    n_latent_dims = params["n_latent_dims"],
+    n_latent_dims = end_n,
     n_inducing_points = params["n_inducing_points"],
     latent_var = params["latent_var"]
   )
