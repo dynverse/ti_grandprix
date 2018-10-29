@@ -6,7 +6,7 @@ RUN pip install git+https://github.com/GPflow/GPflow
 
 RUN pip install git+https://github.com/ManchesterBioinference/GrandPrix
 
-LABEL version 0.1.5
+LABEL version 0.1.7
 
 ADD . /code
 
