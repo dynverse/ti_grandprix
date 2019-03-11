@@ -1,3 +1,5 @@
+#!/usr/local/bin/python
+
 from gpflow import settings
 settings.session.intra_op_parallelism_threads = 1
 settings.session.inter_op_parallelism_threads = 1
@@ -14,16 +16,23 @@ from GrandPrix import GrandPrix
 import time as tm
 checkpoints = {}
 
-
+import dynclipy
 
 #   ____________________________________________________________________________
 #   Load data                                                               ####
-expression = pd.read_csv("/ti/input/expression.csv", index_col=[0])
-params = json.load(open("/ti/input/params.json", "r"))
-end_n = json.load(open("/ti/input/end_n.json"))[0]
+task = dynclipy.main()
+# task = dynclipy.main(
+#   ["--dataset", "/code/example.h5", "--output", "/mnt/output"],
+#   "/code/definition.yml"
+# )
 
-if os.path.exists("/ti/input/timecourse_continuous.csv"):
-  time = pd.read_csv("/ti/input/timecourse_continuous.csv")
+
+expression = task["expression"]
+params = task["params"]
+end_n = task["priors"]["end_id"]
+
+if "timecourse_continuous" in task["priors"]:
+  time = task["priors"]["timecourse_continuous"]
 else:
   time = None
 
@@ -56,11 +65,8 @@ checkpoints["method_aftermethod"] = tm.time()
 
 #   ____________________________________________________________________________
 #   Process output                                                          ####
-# process to end_state_probabilities output format
-cell_ids = pd.DataFrame({
-  "cell_ids": expression.index
-})
-cell_ids.to_csv("/ti/output/cell_ids.csv", index=False)
+# process to end_state_probabilities output format^
+cell_ids = expression.index
 
 pseudotime = pd.DataFrame({
   "cell_id": expression.index,
@@ -77,9 +83,11 @@ for i in range(pt_np.shape[1] - 1):
   end_state_probabilities[split_id + "_1"] = probabilities
   end_state_probabilities[split_id + "_2"] = 1-probabilities
 
-# save output
-pseudotime.to_csv("/ti/output/pseudotime.csv", index=False)
-end_state_probabilities.to_csv("/ti/output/end_state_probabilities.csv", index=False)
-
-# timings
-json.dump(checkpoints, open("/ti/output/timings.json", "w"))
+# save
+dataset = dynclipy.wrap_data(cell_ids = expression.index)
+dataset.add_end_state_probabilities(
+  end_state_probabilities = end_state_probabilities,
+  pseudotime = pseudotime
+)
+dataset.add_timings(timings = timings)
+dataset.write_output(task["output"])
