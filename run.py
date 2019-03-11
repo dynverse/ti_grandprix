@@ -26,15 +26,14 @@ task = dynclipy.main()
 #   "/code/definition.yml"
 # )
 
-
 expression = task["expression"]
 params = task["params"]
-end_n = task["priors"]["end_id"]
+end_n = task["priors"]["end_n"]
 
 if "timecourse_continuous" in task["priors"]:
-  time = task["priors"]["timecourse_continuous"]
+  timecourse_continuous = task["priors"]["timecourse_continuous"]
 else:
-  time = None
+  timecourse_continuous = None
 
 checkpoints["method_afterpreproc"] = tm.time()
 
@@ -44,13 +43,13 @@ checkpoints["method_afterpreproc"] = tm.time()
 if end_n == 0:
   end_n = 1
 
-if time is not None:
+if timecourse_continuous is not None:
   pt_np, var_np = GrandPrix.fit_model(
     data = expression.values,
     n_latent_dims = end_n,
     n_inducing_points = params["n_inducing_points"],
     latent_var = params["latent_var"],
-    latent_prior_mean = time.time,
+    latent_prior_mean = np.repeat(np.expand_dims(timecourse_continuous, 1), 4, 1),
     latent_prior_var = params["latent_prior_var"]
   )
 else:
@@ -76,10 +75,10 @@ pseudotime = pd.DataFrame({
 end_state_probabilities = pd.DataFrame({"cell_id":expression.index})
 for i in range(pt_np.shape[1] - 1):
   split_id = "split_" + str(i)
-
+  
   probabilities = pt_np[:, 1]
   probabilities = (probabilities - min(probabilities))/(max(probabilities) - min(probabilities))
-
+  
   end_state_probabilities[split_id + "_1"] = probabilities
   end_state_probabilities[split_id + "_2"] = 1-probabilities
 
@@ -89,5 +88,5 @@ dataset.add_end_state_probabilities(
   end_state_probabilities = end_state_probabilities,
   pseudotime = pseudotime
 )
-dataset.add_timings(timings = timings)
+dataset.add_timings(timings = checkpoints)
 dataset.write_output(task["output"])
