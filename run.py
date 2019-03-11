@@ -1,5 +1,12 @@
 #!/usr/local/bin/python
 
+import dynclipy
+task = dynclipy.main()
+# task = dynclipy.main(
+#   ["--dataset", "/code/example.h5", "--output", "/mnt/output"],
+#   "/code/definition.yml"
+# )
+
 from gpflow import settings
 settings.session.intra_op_parallelism_threads = 1
 settings.session.inter_op_parallelism_threads = 1
@@ -16,16 +23,8 @@ from GrandPrix import GrandPrix
 import time as tm
 checkpoints = {}
 
-import dynclipy
-
 #   ____________________________________________________________________________
 #   Load data                                                               ####
-task = dynclipy.main()
-# task = dynclipy.main(
-#   ["--dataset", "/code/example.h5", "--output", "/mnt/output"],
-#   "/code/definition.yml"
-# )
-
 expression = task["expression"]
 params = task["params"]
 end_n = task["priors"]["end_n"]
