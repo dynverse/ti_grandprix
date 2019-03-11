@@ -1,45 +1,58 @@
-id: grandprix
-docker_repository: dynverse/ti_grandprix
-singularity_collection: 1550
-container_url: https://github.com/dynverse/ti_grandprix
-name: GrandPrix
-source: tool
-platform: Python
-parameters:
-  n_inducing_points:
-    type: integer
-    default: 40
-    lower: 10
-    upper: 500
-  latent_prior_var:
-    type: numeric
-    default: 0.1
-  latent_var:
-    type: numeric
-    default: 0.028
-input:
-  format: text
-  required: 
+method:
+  id: grandprix
+  tool_id: grandprix
+  name: GrandPrix
+  source: tool
+  platform: Python
+  url: https://github.com/ManchesterBioinference/GrandPrix
+  authors:
+  - given: Sumon
+    family: Ahmed
+    email: sumon.ahmed@postgrad.manchester.ac.uk
+    github: sumonahmedUoM
+
+wrapper:
+  type: end_state_probabilities
+  trajectory_types:
+  - linear
+  - bifurcation
+  - multifurcation
+  topology_inference: parameter
+  input_required:
   - expression
   - end_n
-  optional: timecourse_continuous
-output:
-  format: text
-  outputs:
-  - end_state_probabilities
-  - timings
-wrapper_type: end_state_probabilities
-doi: 10.1101/227843
-google_scholar_cluster_id: '15033203703043818597'
-trajectory_types: 
-- linear
-- bifurcation
-- multifurcation
-topology_inference: parameter
-authors:
-- given: Sumon
-  family: Ahmed
-  email: sumon.ahmed@postgrad.manchester.ac.uk
-  github: sumonahmedUoM
-preprint_date: '2017-12-03'
-code_url: https://github.com/ManchesterBioinference/GrandPrix
+  input_optional:
+  - timecourse_continuous
+
+container:
+  docker: dynverse/ti_grandprix
+  url: https://github.com/dynverse/ti_grandprix
+
+manuscript:
+  doi: 10.1101/227843
+  google_scholar_cluster_id: '15033203703043818597'
+  preprint_date: '2017-12-03'
+  publication_date: '2018-07-02'
+
+parameters:
+  - id: n_inducing_points
+    type: integer
+    distribution:
+      type: uniform
+      lower: 0
+      upper: 1
+    default: 40
+  - id: latent_prior_var
+    type: numeric
+    distribution:
+      type: uniform
+      lower: 0
+      upper: 1
+    default: 0.1
+  - id: latent_var
+    type: numeric
+    distribution:
+      type: uniform
+      lower: 0
+      upper: 1
+    default: 0.028
