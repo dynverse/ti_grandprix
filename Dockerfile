@@ -6,6 +6,6 @@ RUN pip install git+https://github.com/GPflow/GPflow
 
 RUN pip install git+https://github.com/ManchesterBioinference/GrandPrix
 
-COPY definition.yml example.h5 run.py /code/
+COPY definition.yml run.py example.sh /code/
 
 ENTRYPOINT ["/code/run.py"]
