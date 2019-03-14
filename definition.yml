@@ -21,8 +21,7 @@ wrapper:
   input_required:
   - expression
   - end_n
-  input_optional:
-  - timecourse_continuous
+  input_optional: timecourse_continuous
 
 container:
   docker: dynverse/ti_grandprix
