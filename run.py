@@ -26,7 +26,7 @@ checkpoints = {}
 #   ____________________________________________________________________________
 #   Load data                                                               ####
 expression = task["expression"]
-params = task["params"]
+parameters = task["parameters"]
 end_n = task["priors"]["end_n"]
 
 if "timecourse_continuous" in task["priors"]:
@@ -46,17 +46,17 @@ if timecourse_continuous is not None:
   pt_np, var_np = GrandPrix.fit_model(
     data = expression.values,
     n_latent_dims = end_n,
-    n_inducing_points = params["n_inducing_points"],
-    latent_var = params["latent_var"],
+    n_inducing_points = parameters["n_inducing_points"],
+    latent_var = parameters["latent_var"],
     latent_prior_mean = np.repeat(np.expand_dims(timecourse_continuous, 1), 4, 1),
-    latent_prior_var = params["latent_prior_var"]
+    latent_prior_var = parameters["latent_prior_var"]
   )
 else:
   pt_np, var_np = GrandPrix.fit_model(
     data = expression.values,
     n_latent_dims = end_n,
-    n_inducing_points = params["n_inducing_points"],
-    latent_var = params["latent_var"]
+    n_inducing_points = parameters["n_inducing_points"],
+    latent_var = parameters["latent_var"]
   )
 
 checkpoints["method_aftermethod"] = tm.time()
