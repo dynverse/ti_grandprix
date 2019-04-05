@@ -1,4 +1,6 @@
-FROM dynverse/dynwrap:py3.6
+FROM dynverse/dynwrappy:v0.1.0
+
+ARG GITHUB_PAT
 
 RUN pip install tensorflow
 
@@ -6,8 +8,6 @@ RUN pip install git+https://github.com/GPflow/GPflow
 
 RUN pip install git+https://github.com/ManchesterBioinference/GrandPrix
 
-LABEL version 0.1.7
+COPY definition.yml run.py example.sh /code/
 
-ADD . /code
-
-ENTRYPOINT python /code/run.py
+ENTRYPOINT ["/code/run.py"]
